@@ -1,0 +1,23 @@
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-delivered {
+  background: linear-gradient(135deg, #2d5f3d 0%, #1a472a 100%);
+  color: white;
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+  color: white;
+}
+
+.status-processing {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  color: white;
+}
