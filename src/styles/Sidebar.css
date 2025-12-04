@@ -23,12 +23,13 @@
 .company-logo {
   display: flex;
   justify-content: center;
-  margin-bottom: 15px;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .logo-image {
-  height: 60px;
-  width: auto;
+  width: 100%;
+  height: auto;
   object-fit: contain;
 }
 

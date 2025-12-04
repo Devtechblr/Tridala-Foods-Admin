@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdAdd, MdVisibility, MdEdit } from 'react-icons/md';
+import { MdVisibility } from 'react-icons/md';
 import '../styles/Orders.css';
 
 const Orders = () => {
@@ -27,9 +27,6 @@ const Orders = () => {
     <div className="page-container">
       <div className="page-header">
         <h1 className="page-title">Orders</h1>
-        <button className="btn-primary">
-          <MdAdd /> New Order
-        </button>
       </div>
 
       <div className="content-section">
@@ -61,9 +58,6 @@ const Orders = () => {
                     <td>
                       <button className="btn-action">
                         <MdVisibility /> View
-                      </button>
-                      <button className="btn-action">
-                        <MdEdit /> Edit
                       </button>
                     </td>
                   </tr>
