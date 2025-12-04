@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MdDashboard, MdInventory, MdShoppingCart, MdLogout } from 'react-icons/md';
+import { MdDashboard, MdInventory, MdShoppingCart, MdLogout, MdCurrencyRupee, MdPeople } from 'react-icons/md';
 import '../styles/Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onLogout }) => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
 
   const menuItems = [
-    { path: '/', icon: MdDashboard, label: 'Dashboard' },
+    { path: '/dashboard', icon: MdDashboard, label: 'Dashboard' },
     { path: '/products', icon: MdInventory, label: 'Products' },
-    { path: '/orders', icon: MdShoppingCart, label: 'Orders' }
+    { path: '/orders', icon: MdShoppingCart, label: 'Orders' },
+    { path: '/revenue', icon: MdCurrencyRupee, label: 'Revenue' },
+    { path: '/customers', icon: MdPeople, label: 'Customers' }
   ];
 
   const handleLogout = () => {
-    // Add your logout logic here
-    console.log('Logging out...');
-    alert('Logged out successfully!');
+    if (window.confirm('Are you sure you want to logout?')) {
+      onLogout();
+    }
   };
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-header">
         <div className="company-logo">
-          <img src="/TridalaLogo.jpg" alt="Tridala Nutra Foods" className="logo-image" />
+          <img src="/logo.jpg" alt="Tridala Nutra Foods" className="logo-image" />
         </div>
       </div>
 

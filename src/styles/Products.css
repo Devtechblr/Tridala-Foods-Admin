@@ -145,7 +145,99 @@
   font-weight: 600;
 }
 
-/* Modal Styles */
+/* Inline Form Styles */
+.product-form-card {
+  margin-bottom: 25px;
+  border: 2px solid #2d5f3d;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e8eaed;
+  background: #f8f9fa;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  color: #ff8c42;
+  background: #fff5f0;
+}
+
+/* Inline Edit Form in Table */
+.edit-form-cell {
+  padding: 0 !important;
+  background: #f8f9fa;
+}
+
+.inline-edit-form {
+  background: white;
+  border: 2px solid #ff8c42;
+  border-radius: 8px;
+  margin: 10px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.inline-edit-form .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e8eaed;
+  background: #fff5f0;
+}
+
+.inline-edit-form .form-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #ff8c42;
+  font-weight: 600;
+}
+
+.inline-edit-form .product-form {
+  padding: 20px;
+}
+
+.inline-edit-form .form-group {
+  margin-bottom: 20px;
+}
+
+/* Modal Styles (keeping for backwards compatibility but not used) */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -207,7 +299,8 @@
 
 /* Form Styles */
 .product-form {
-  padding: 30px;
+  padding: 25px;
+  max-width: 100%;
 }
 
 .form-group {
@@ -308,6 +401,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: #f8f9fa;
+  text-align: center;
 }
 
 .upload-label:hover {
@@ -319,11 +413,16 @@
   font-size: 48px;
   color: #5f6368;
   margin-bottom: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .upload-label span {
   color: #5f6368;
   font-size: 14px;
+  display: block;
+  text-align: center;
 }
 
 .upload-hint {

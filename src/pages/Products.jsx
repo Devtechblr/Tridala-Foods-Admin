@@ -3,14 +3,22 @@ import { MdAdd, MdEdit, MdDelete, MdClose, MdImage, MdSearch, MdFilterList } fro
 import '../styles/Products.css';
 
 const Products = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
   const [showCategoryInput, setShowCategoryInput] = useState(false);
   const [showWeightInput, setShowWeightInput] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
-  const [categories, setCategories] = useState(['Grains', 'Seeds', 'Nuts', 'Pulses']);
+  const [categories, setCategories] = useState([
+    'Millet Idly & Dosa Mixes',
+    'Coffee Cubes',
+    'Millet Chikki',
+    'Moringa Nutri Bar',
+    'Moringa Soup Powder',
+    'Chutney Powders',
+    'Health Mix'
+  ]);
   const [weights, setWeights] = useState(['100g', '250g', '500g', '1kg']);
   const [newCategory, setNewCategory] = useState('');
   const [newWeight, setNewWeight] = useState('');
@@ -26,16 +34,16 @@ const Products = () => {
   });
 
   const products = [
-    { id: 1, name: 'Organic Quinoa', category: 'Grains', price: '₹299', stock: 150, description: 'Premium organic quinoa', benefits: 'High in protein and fiber' },
-    { id: 2, name: 'Chia Seeds', category: 'Seeds', price: '₹199', stock: 200, description: 'Natural chia seeds', benefits: 'Rich in omega-3' },
-    { id: 3, name: 'Flax Seeds', category: 'Seeds', price: '₹149', stock: 180, description: 'Organic flax seeds', benefits: 'Good for heart health' },
-    { id: 4, name: 'Brown Rice', category: 'Grains', price: '₹89', stock: 300, description: 'Whole grain brown rice', benefits: 'High in fiber' },
+    { id: 1, name: 'Red Rice Dosa Mix', category: 'Millet Idly & Dosa Mixes', price: '₹299', stock: 150, description: 'Premium organic quinoa', benefits: 'High in protein and fiber' },
+    { id: 2, name: '7 cubes -Assorted Pack', category: 'Coffee Cubes', price: '₹199', stock: 200, description: 'Natural chia seeds', benefits: 'Rich in omega-3' },
+    { id: 3, name: 'Jowar Chikki', category: 'Millet Chikki ', price: '₹149', stock: 180, description: 'Organic flax seeds', benefits: 'Good for heart health' },
+    { id: 4, name: 'Curry Leaves Chutney Powder', category: 'Chutney Powders', price: '₹89', stock: 300, description: 'Whole grain brown rice', benefits: 'High in fiber' },
   ];
 
   const handleAddProduct = () => {
     setIsEditMode(false);
     setEditingProductId(null);
-    setShowModal(true);
+    setShowForm(!showForm);
   };
 
   const handleEditProduct = (product) => {
@@ -49,11 +57,11 @@ const Products = () => {
       weight: '500g', // Default weight, you can enhance this
       amount: product.price.replace('₹', '')
     });
-    setShowModal(true);
+    setShowForm(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleCloseForm = () => {
+    setShowForm(false);
     setIsEditMode(false);
     setEditingProductId(null);
     setShowCategoryInput(false);
@@ -124,7 +132,7 @@ const Products = () => {
       console.log('Images:', selectedImages);
       // Add your product submission logic here
     }
-    handleCloseModal();
+    handleCloseForm();
   };
 
   // Filter products based on search term and category
@@ -171,59 +179,13 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="content-section">
-        <div className="card">
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Product Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.id}</td>
-                      <td>{product.name}</td>
-                      <td><span className="badge">{product.category}</span></td>
-                      <td>{product.price}</td>
-                      <td><span className="stock-badge">{product.stock}</span></td>
-                      <td>
-                        <button className="btn-action" onClick={() => handleEditProduct(product)}>
-                          <MdEdit /> Edit
-                        </button>
-                        <button className="btn-action danger">
-                          <MdDelete /> Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: '#7f8c8d' }}>
-                      No products found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Add/Edit Product Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
+      {/* Inline Add/Edit Product Form */}
+      {showForm && (
+        <div className="content-section">
+          <div className="card product-form-card">
+            <div className="form-header">
               <h2>{isEditMode ? 'Edit Product' : 'Add New Product'}</h2>
-              <button className="close-btn" onClick={handleCloseModal}>
+              <button className="close-btn" onClick={handleCloseForm}>
                 <MdClose />
               </button>
             </div>
@@ -396,7 +358,7 @@ const Products = () => {
 
               {/* Form Actions */}
               <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={handleCloseModal}>
+                <button type="button" className="btn-secondary" onClick={handleCloseForm}>
                   Cancel
                 </button>
                 <button type="submit" className="btn-primary">
@@ -415,6 +377,52 @@ const Products = () => {
           </div>
         </div>
       )}
+
+      <div className="content-section">
+        <div className="card">
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <tr key={product.id}>
+                      <td>{product.id}</td>
+                      <td>{product.name}</td>
+                      <td><span className="badge">{product.category}</span></td>
+                      <td>{product.price}</td>
+                      <td><span className="stock-badge">{product.stock}</span></td>
+                      <td>
+                        <button className="btn-action" onClick={() => handleEditProduct(product)}>
+                          <MdEdit /> Edit
+                        </button>
+                        <button className="btn-action danger">
+                          <MdDelete /> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: '#7f8c8d' }}>
+                      No products found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
