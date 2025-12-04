@@ -149,19 +149,25 @@
 
 .input-wrapper {
   position: relative;
+  width: 100%;
+  display: block;
+  min-height: 50px;
 }
 
 .input-icon {
   position: absolute;
-  left: 15px;
-  font-size: 20px;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
   color: #5f6368;
   pointer-events: none;
+  z-index: 2;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 14px 55px 14px 45px;
+  padding: 14px 20px 14px 48px;
   border: 2px solid #f0f0f0;
   border-radius: 8px;
   font-size: 14px;
@@ -169,6 +175,20 @@
   transition: all 0.3s ease;
   background: white;
   box-sizing: border-box;
+  display: block;
+  height: 50px;
+  line-height: 1.5;
+}
+
+/* Email field - standard right padding */
+.input-wrapper input[type="email"] {
+  padding-right: 20px;
+}
+
+/* Password field - left padding for lock icon, right padding for toggle button */
+.input-wrapper input#password {
+  padding-left: 48px !important;
+  padding-right: 55px !important;
 }
 
 .input-wrapper input:focus {
@@ -183,26 +203,29 @@
 
 .toggle-password {
   position: absolute;
-  right: 15px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #5f6368;
   font-size: 20px;
-  width: 24px;
-  height: 24px;
-  transition: color 0.3s ease;
-  z-index: 10;
+  min-width: 40px;
+  min-height: 40px;
+  transition: all 0.3s ease;
+  z-index: 3;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .toggle-password:hover {
   color: #ff8c42;
+  background-color: rgba(255, 140, 66, 0.1);
 }
 
 .form-options {
