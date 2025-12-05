@@ -506,3 +506,83 @@
 .modal-content::-webkit-scrollbar-thumb:hover {
   background: #dadce0;
 }
+
+/* Inline Edit Form Row */
+.edit-form-row {
+  background-color: #f8f9fa;
+}
+
+.edit-form-row td {
+  padding: 0 !important;
+}
+
+.inline-edit-form {
+  padding: 25px;
+  background: white;
+  border: 2px solid #ff8c42;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.inline-edit-form .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e8eaed;
+}
+
+.inline-edit-form .form-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.inline-edit-form .close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #7f8c8d;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.inline-edit-form .close-btn:hover {
+  background-color: #f8f9fa;
+  color: #e74c3c;
+}
+
+.product-form-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-form-inline .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.product-form-inline .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.product-form-inline .form-actions {
+  margin-top: 10px;
+  padding-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .product-form-inline .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

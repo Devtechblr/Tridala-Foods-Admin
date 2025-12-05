@@ -57,7 +57,7 @@ const Products = () => {
       weight: '500g', // Default weight, you can enhance this
       amount: product.price.replace('₹', '')
     });
-    setShowForm(true);
+    setShowForm(false); // Don't show top form for edit
   };
 
   const handleCloseForm = () => {
@@ -395,21 +395,212 @@ const Products = () => {
               <tbody>
                 {filteredProducts.length > 0 ? (
                   filteredProducts.map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.id}</td>
-                      <td>{product.name}</td>
-                      <td><span className="badge">{product.category}</span></td>
-                      <td>{product.price}</td>
-                      <td><span className="stock-badge">{product.stock}</span></td>
-                      <td>
-                        <button className="btn-action" onClick={() => handleEditProduct(product)}>
-                          <MdEdit /> Edit
-                        </button>
-                        <button className="btn-action danger">
-                          <MdDelete /> Delete
-                        </button>
-                      </td>
-                    </tr>
+                    <React.Fragment key={product.id}>
+                      <tr>
+                        <td>{product.id}</td>
+                        <td>{product.name}</td>
+                        <td><span className="badge">{product.category}</span></td>
+                        <td>{product.price}</td>
+                        <td><span className="stock-badge">{product.stock}</span></td>
+                        <td>
+                          <button className="btn-action" onClick={() => handleEditProduct(product)}>
+                            <MdEdit /> Edit
+                          </button>
+                          <button className="btn-action danger">
+                            <MdDelete /> Delete
+                          </button>
+                        </td>
+                      </tr>
+                      {/* Inline Edit Form */}
+                      {isEditMode && editingProductId === product.id && (
+                        <tr className="edit-form-row">
+                          <td colSpan="6">
+                            <div className="inline-edit-form">
+                              <div className="form-header">
+                                <h3>Edit Product Details</h3>
+                                <button className="close-btn" onClick={handleCloseForm}>
+                                  <MdClose />
+                                </button>
+                              </div>
+
+                              <form onSubmit={handleSubmit} className="product-form-inline">
+                                <div className="form-grid">
+                                  {/* Product Name */}
+                                  <div className="form-group">
+                                    <label>Product Name *</label>
+                                    <input
+                                      type="text"
+                                      name="name"
+                                      value={formData.name}
+                                      onChange={handleInputChange}
+                                      placeholder="Enter product name"
+                                      required
+                                    />
+                                  </div>
+
+                                  {/* Product Category */}
+                                  <div className="form-group">
+                                    <label>Product Category *</label>
+                                    <div className="input-with-add">
+                                      <select
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleInputChange}
+                                        required
+                                      >
+                                        <option value="">Select category</option>
+                                        {categories.map((cat, index) => (
+                                          <option key={index} value={cat}>{cat}</option>
+                                        ))}
+                                      </select>
+                                      <button
+                                        type="button"
+                                        className="add-btn"
+                                        onClick={() => setShowCategoryInput(!showCategoryInput)}
+                                      >
+                                        <MdAdd />
+                                      </button>
+                                    </div>
+                                    {showCategoryInput && (
+                                      <div className="add-input-wrapper">
+                                        <input
+                                          type="text"
+                                          value={newCategory}
+                                          onChange={(e) => setNewCategory(e.target.value)}
+                                          placeholder="New category name"
+                                        />
+                                        <button type="button" onClick={handleAddCategory}>Add</button>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Product Weight */}
+                                  <div className="form-group">
+                                    <label>Product Weight *</label>
+                                    <div className="input-with-add">
+                                      <select
+                                        name="weight"
+                                        value={formData.weight}
+                                        onChange={handleInputChange}
+                                        required
+                                      >
+                                        <option value="">Select weight</option>
+                                        {weights.map((weight, index) => (
+                                          <option key={index} value={weight}>{weight}</option>
+                                        ))}
+                                      </select>
+                                      <button
+                                        type="button"
+                                        className="add-btn"
+                                        onClick={() => setShowWeightInput(!showWeightInput)}
+                                      >
+                                        <MdAdd />
+                                      </button>
+                                    </div>
+                                    {showWeightInput && (
+                                      <div className="add-input-wrapper">
+                                        <input
+                                          type="text"
+                                          value={newWeight}
+                                          onChange={(e) => setNewWeight(e.target.value)}
+                                          placeholder="New weight (e.g., 2kg)"
+                                        />
+                                        <button type="button" onClick={handleAddWeight}>Add</button>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Product Amount */}
+                                  <div className="form-group">
+                                    <label>Amount *</label>
+                                    <input
+                                      type="number"
+                                      name="amount"
+                                      value={formData.amount}
+                                      onChange={handleInputChange}
+                                      placeholder="Enter amount"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Product Description */}
+                                <div className="form-group full-width">
+                                  <label>Product Description *</label>
+                                  <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter product description"
+                                    rows="3"
+                                    required
+                                  />
+                                </div>
+
+                                {/* Product Benefits */}
+                                <div className="form-group full-width">
+                                  <label>Product Benefits</label>
+                                  <textarea
+                                    name="benefits"
+                                    value={formData.benefits}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter product benefits"
+                                    rows="3"
+                                  />
+                                </div>
+
+                                {/* Product Images */}
+                                <div className="form-group full-width">
+                                  <label>Product Images (Max 5)</label>
+                                  <div className="image-upload-container">
+                                    <input
+                                      type="file"
+                                      id={`imageUpload-${product.id}`}
+                                      accept="image/*"
+                                      multiple
+                                      onChange={handleImageUpload}
+                                      style={{ display: 'none' }}
+                                    />
+                                    <label htmlFor={`imageUpload-${product.id}`} className="upload-label">
+                                      <MdImage />
+                                      <span>Click to upload images</span>
+                                      <span className="upload-hint">{selectedImages.length}/5 images</span>
+                                    </label>
+                                    
+                                    {selectedImages.length > 0 && (
+                                      <div className="image-preview-grid">
+                                        {selectedImages.map((image, index) => (
+                                          <div key={index} className="image-preview">
+                                            <img src={image} alt={`Preview ${index + 1}`} />
+                                            <button
+                                              type="button"
+                                              className="remove-image-btn"
+                                              onClick={() => handleRemoveImage(index)}
+                                            >
+                                              <MdClose />
+                                            </button>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Form Actions */}
+                                <div className="form-actions">
+                                  <button type="button" className="btn-secondary" onClick={handleCloseForm}>
+                                    Cancel
+                                  </button>
+                                  <button type="submit" className="btn-primary">
+                                    <MdEdit /> Update Product
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   ))
                 ) : (
                   <tr>
