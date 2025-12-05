@@ -9,61 +9,71 @@ const Customers = () => {
       id: 1,
       name: 'John Doe',
       phoneNumber: '+91 98765 43210',
-      email: 'john.doe@example.com'
+      email: 'john.doe@example.com',
+      joinedDate: '2024-01-15'
     },
     {
       id: 2,
       name: 'Jane Smith',
       phoneNumber: '+91 98765 43211',
-      email: 'jane.smith@example.com'
+      email: 'jane.smith@example.com',
+      joinedDate: '2024-02-20'
     },
     {
       id: 3,
       name: 'Bob Johnson',
       phoneNumber: '+91 98765 43212',
-      email: 'bob.johnson@example.com'
+      email: 'bob.johnson@example.com',
+      joinedDate: '2024-03-10'
     },
     {
       id: 4,
       name: 'Alice Brown',
       phoneNumber: '+91 98765 43213',
-      email: 'alice.brown@example.com'
+      email: 'alice.brown@example.com',
+      joinedDate: '2024-04-05'
     },
     {
       id: 5,
       name: 'Charlie Davis',
       phoneNumber: '+91 98765 43214',
-      email: 'charlie.davis@example.com'
+      email: 'charlie.davis@example.com',
+      joinedDate: '2024-05-18'
     },
     {
       id: 6,
       name: 'Emma Wilson',
       phoneNumber: '+91 98765 43215',
-      email: 'emma.wilson@example.com'
+      email: 'emma.wilson@example.com',
+      joinedDate: '2024-06-22'
     },
     {
       id: 7,
       name: 'David Miller',
       phoneNumber: '+91 98765 43216',
-      email: 'david.miller@example.com'
+      email: 'david.miller@example.com',
+      joinedDate: '2024-07-30'
     },
     {
       id: 8,
       name: 'Sarah Lee',
       phoneNumber: '+91 98765 43217',
-      email: 'sarah.lee@example.com'
+      email: 'sarah.lee@example.com',
+      joinedDate: '2024-08-14'
     },
     {
       id: 9,
       name: 'Michael Chen',
       phoneNumber: '+91 98765 43218',
-      email: 'michael.chen@example.com'
+      email: 'michael.chen@example.com',
+      joinedDate: '2024-09-25'
     },
     {
       id: 10,
       name: 'Lisa Anderson',
       phoneNumber: '+91 98765 43219',
-      email: 'lisa.anderson@example.com'
+      email: 'lisa.anderson@example.com',
+      joinedDate: '2024-10-08'
     }
   ]);
 
@@ -72,7 +82,7 @@ const Customers = () => {
     const filteredCustomers = getFilteredCustomers();
     
     const csvRows = [
-      ['ID', 'Name', 'Phone Number', 'Email']
+      ['ID', 'Name', 'Phone Number', 'Email', 'Joined Date']
     ];
 
     filteredCustomers.forEach(customer => {
@@ -80,7 +90,8 @@ const Customers = () => {
         customer.id,
         customer.name,
         customer.phoneNumber,
-        customer.email
+        customer.email,
+        customer.joinedDate
       ]);
     });
 
@@ -157,6 +168,7 @@ const Customers = () => {
                   <th>Name</th>
                   <th>Phone Number</th>
                   <th>Email</th>
+                  <th>Joined Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,11 +178,12 @@ const Customers = () => {
                       <td><strong>{customer.name}</strong></td>
                       <td>{customer.phoneNumber}</td>
                       <td>{customer.email}</td>
+                      <td>{new Date(customer.joinedDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" className="no-data">No customers found</td>
+                    <td colSpan="4" className="no-data">No customers found</td>
                   </tr>
                 )}
               </tbody>

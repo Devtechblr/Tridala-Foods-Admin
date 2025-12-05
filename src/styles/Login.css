@@ -62,19 +62,18 @@
 }
 
 .company-logo {
-  width: 290px;
-  height: 290px;
+  width: 250px;
+  aspect-ratio: 1 / 1;
   margin: 0 auto 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .company-logo img {
-  max-width: 200%;
-  max-height: 200%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
