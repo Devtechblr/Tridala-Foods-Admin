@@ -281,19 +281,30 @@ const Orders = () => {
                       <td>{order.date}</td>
                       <td>{order.amount}</td>
                       <td>
-                        <div className="status-dropdown-wrapper">
-                          <span className="status-icon">{getStatusIcon(order.status)}</span>
-                          <select 
-                            className={`status-select ${getStatusClass(order.status)}`}
-                            value={order.status}
-                            onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                          >
-                            <option value="Pending" className="option-pending">Pending</option>
-                            <option value="Processing" className="option-processing">Processing</option>
-                            <option value="Delivered" className="option-delivered">Delivered</option>
-                          </select>
-                          <MdArrowDropDown className="dropdown-arrow" />
-                        </div>
+                        {order.status === 'Delivered' ? (
+                          <div className="status-badge-wrapper">
+                            <span className="status-icon">{getStatusIcon(order.status)}</span>
+                            <span className={`status-badge ${getStatusClass(order.status)}`}>
+                              {order.status}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="status-dropdown-wrapper">
+                            <span className="status-icon">{getStatusIcon(order.status)}</span>
+                            <select 
+                              className={`status-select ${getStatusClass(order.status)}`}
+                              value={order.status}
+                              onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                            >
+                              {order.status === 'Pending' && (
+                                <option value="Pending" className="option-pending">Pending</option>
+                              )}
+                              <option value="Processing" className="option-processing">Processing</option>
+                              <option value="Delivered" className="option-delivered">Delivered</option>
+                            </select>
+                            <MdArrowDropDown className="dropdown-arrow" />
+                          </div>
+                        )}
                       </td>
                       <td>
                         <div className="action-buttons">

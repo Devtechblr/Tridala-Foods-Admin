@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { MdSearch, MdDownload, MdSort, MdCalendarToday, MdEvent } from 'react-icons/md';
+import { MdSearch, MdDownload, MdSort, MdDateRange, MdClear } from 'react-icons/md';
 import '../styles/Revenue.css';
 
 const Revenue = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [revenues, setRevenues] = useState([
     {
       id: 1,
@@ -74,25 +74,11 @@ const Revenue = () => {
     }
   ]);
 
-  // Month names for the month filter
-  const months = [
-    { value: '01', label: 'January' },
-    { value: '02', label: 'February' },
-    { value: '03', label: 'March' },
-    { value: '04', label: 'April' },
-    { value: '05', label: 'May' },
-    { value: '06', label: 'June' },
-    { value: '07', label: 'July' },
-    { value: '08', label: 'August' },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' }
-  ];
-
-  // Generate year list (last 5 years)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+  // Clear date range filter
+  const clearDateRange = () => {
+    setFromDate('');
+    setToDate('');
+  };
 
   // Download single revenue entry as CSV
   const downloadRevenueCSV = (revenue) => {
@@ -161,8 +147,6 @@ const Revenue = () => {
     let filtered = revenues.filter(revenue => {
       const searchLower = searchTerm.toLowerCase();
       const revenueDate = new Date(revenue.date);
-      const revenueMonth = String(revenueDate.getMonth() + 1).padStart(2, '0');
-      const revenueYear = String(revenueDate.getFullYear());
 
       // Search filter
       const matchesSearch = (
@@ -173,13 +157,23 @@ const Revenue = () => {
         revenue.totalAmount.includes(searchTerm)
       );
 
-      // Month filter
-      const matchesMonth = selectedMonth === '' || revenueMonth === selectedMonth;
+      // Date range filter
+      let matchesDateRange = true;
+      if (fromDate && toDate) {
+        const from = new Date(fromDate);
+        const to = new Date(toDate);
+        to.setHours(23, 59, 59, 999); // Include the entire end date
+        matchesDateRange = revenueDate >= from && revenueDate <= to;
+      } else if (fromDate) {
+        const from = new Date(fromDate);
+        matchesDateRange = revenueDate >= from;
+      } else if (toDate) {
+        const to = new Date(toDate);
+        to.setHours(23, 59, 59, 999);
+        matchesDateRange = revenueDate <= to;
+      }
 
-      // Year filter
-      const matchesYear = selectedYear === '' || revenueYear === selectedYear;
-
-      return matchesSearch && matchesMonth && matchesYear;
+      return matchesSearch && matchesDateRange;
     });
 
     // Sort logic
@@ -218,26 +212,25 @@ const Revenue = () => {
       <div className="content-section">
         {/* Search and Filter Bar */}
         <div className="search-filter-bar">
-          <div className="search-box-wrapper">
-            <div className="search-box">
-              <MdSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search by customer, product, payment mode..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-            </div>
-            <button 
-              className="btn-download-all"
-              onClick={downloadAllRevenueCSV}
-              title="Download revenue report"
-            >
-              <MdDownload /> Download Report
-            </button>
+          <div className="search-box">
+            <MdSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search by customer, product..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
           </div>
-          
+
+          <button 
+            className="btn-download-all"
+            onClick={downloadAllRevenueCSV}
+            title="Download revenue report"
+          >
+            <MdDownload /> Download
+          </button>
+
           <div className="sort-box">
             <MdSort className="sort-icon" />
             <select 
@@ -245,40 +238,50 @@ const Revenue = () => {
               onChange={(e) => setSortBy(e.target.value)}
               className="sort-select"
             >
-              <option value="date-desc">Date (Newest First)</option>
-              <option value="date-asc">Date (Oldest First)</option>
-              <option value="name-asc">Name (A-Z)</option>
-              <option value="name-desc">Name (Z-A)</option>
+              <option value="date-desc">Newest</option>
+              <option value="date-asc">Oldest</option>
+              <option value="name-asc">A-Z</option>
+              <option value="name-desc">Z-A</option>
             </select>
           </div>
 
-          <div className="filter-box">
-            <MdCalendarToday className="filter-icon" />
-            <select 
-              value={selectedMonth} 
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="filter-select"
-            >
-              <option value="">All Months</option>
-              {months.map((month) => (
-                <option key={month.value} value={month.value}>{month.label}</option>
-              ))}
-            </select>
+          <div className="date-input-group">
+            <label>From</label>
+            <div className="date-input-wrapper">
+              <MdDateRange className="date-icon" />
+              <input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                max={toDate || undefined}
+                className="date-input"
+              />
+            </div>
           </div>
 
-          <div className="filter-box">
-            <MdEvent className="filter-icon" />
-            <select 
-              value={selectedYear} 
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="filter-select"
-            >
-              <option value="">All Years</option>
-              {years.map((year) => (
-                <option key={year} value={String(year)}>{year}</option>
-              ))}
-            </select>
+          <div className="date-input-group">
+            <label>To</label>
+            <div className="date-input-wrapper">
+              <MdDateRange className="date-icon" />
+              <input
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                min={fromDate || undefined}
+                className="date-input"
+              />
+            </div>
           </div>
+
+          {(fromDate || toDate) && (
+            <button 
+              className="btn-clear-date"
+              onClick={clearDateRange}
+              title="Clear date range"
+            >
+              <MdClear />
+            </button>
+          )}
         </div>
 
         {/* Total Revenue Card */}

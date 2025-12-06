@@ -15,6 +15,30 @@
   gap: 8px;
 }
 
+/* Status Badge Wrapper (for Delivered - no dropdown) */
+.status-badge-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge-wrapper .status-badge {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge-wrapper .status-delivered {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+}
+
+.status-badge-wrapper .status-icon {
+  color: #4caf50;
+}
+
 .status-icon {
   font-size: 18px;
   display: flex;
@@ -154,9 +178,9 @@
 
 .order-details-header h3 {
   margin: 0;
-  color: #4caf50;
+  color: #000000;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .order-details-grid {
@@ -175,9 +199,9 @@
 
 .details-section h4 {
   margin: 0 0 16px 0;
-  color: #4caf50;
+  color: #000000;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 800;
   padding-bottom: 12px;
   border-bottom: 2px solid #ff8c42;
 }
@@ -223,26 +247,27 @@
 }
 
 .items-table thead {
-  background-color: #4caf50;
+  background-color: transparent;
 }
 
 .items-table thead th {
-  color: white;
+  color: #000000;
   padding: 12px;
-  text-align: left;
-  font-weight: 600;
+  text-align: center;
+  font-weight: 800;
   font-size: 14px;
   cursor: default;
   pointer-events: none;
+  border: none;
 }
 
 .items-table thead tr:hover {
-  background-color: #4caf50 !important;
+  background-color: transparent !important;
 }
 
 .items-table thead tr:hover th {
   background-color: transparent !important;
-  color: white !important;
+  color: #000000 !important;
 }
 
 .items-table tbody td {
@@ -251,6 +276,7 @@
   font-size: 14px;
   color: #495057;
   transition: color 0.2s ease;
+  text-align: center;
 }
 
 .items-table tbody tr:hover td {
@@ -264,11 +290,12 @@
 .order-total {
   margin-top: 16px;
   padding: 16px;
-  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
-  color: white;
+  background: rgba(255, 140, 66, 0.1);
+  color: #ff6b35;
   border-radius: 8px;
   text-align: right;
   font-size: 18px;
+  border: 1px solid rgba(255, 140, 66, 0.3);
 }
 
 .order-total strong {
