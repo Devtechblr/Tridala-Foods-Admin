@@ -33,16 +33,30 @@ const Products = () => {
     amount: ''
   });
 
-  const products = [
-    { id: 1, name: 'Red Rice Dosa Mix', category: 'Millet Idly & Dosa Mixes', price: '₹299', stock: 150, description: 'Premium organic quinoa', benefits: 'High in protein and fiber' },
-    { id: 2, name: '7 cubes -Assorted Pack', category: 'Coffee Cubes', price: '₹199', stock: 200, description: 'Natural chia seeds', benefits: 'Rich in omega-3' },
-    { id: 3, name: 'Jowar Chikki', category: 'Millet Chikki ', price: '₹149', stock: 180, description: 'Organic flax seeds', benefits: 'Good for heart health' },
-    { id: 4, name: 'Curry Leaves Chutney Powder', category: 'Chutney Powders', price: '₹89', stock: 300, description: 'Whole grain brown rice', benefits: 'High in fiber' },
-  ];
+  const [products, setProducts] = useState([
+    { id: 1, name: 'Red Rice Dosa Mix', category: 'Millet Idly & Dosa Mixes', price: '₹299', stock: 150, description: 'Premium organic quinoa', benefits: 'High in protein and fiber', weight: '500g' },
+    { id: 2, name: '7 cubes -Assorted Pack', category: 'Coffee Cubes', price: '₹199', stock: 200, description: 'Natural chia seeds', benefits: 'Rich in omega-3', weight: '250g' },
+    { id: 3, name: 'Jowar Chikki', category: 'Millet Chikki ', price: '₹149', stock: 180, description: 'Organic flax seeds', benefits: 'Good for heart health', weight: '100g' },
+    { id: 4, name: 'Curry Leaves Chutney Powder', category: 'Chutney Powders', price: '₹89', stock: 300, description: 'Whole grain brown rice', benefits: 'High in fiber', weight: '250g' },
+  ]);
 
   const handleAddProduct = () => {
     setIsEditMode(false);
     setEditingProductId(null);
+    // Reset form fields for new entry
+    setFormData({
+      name: '',
+      description: '',
+      benefits: '',
+      category: '',
+      weight: '',
+      amount: ''
+    });
+    setSelectedImages([]);
+    setShowCategoryInput(false);
+    setShowWeightInput(false);
+    setNewCategory('');
+    setNewWeight('');
     setShowForm(!showForm);
   };
 
@@ -123,14 +137,35 @@ const Products = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditMode) {
-      console.log('Updating Product ID:', editingProductId);
-      console.log('Updated Product Data:', formData);
-      console.log('Images:', selectedImages);
-      // Add your product update logic here
+      // Update existing product
+      setProducts(prevProducts => 
+        prevProducts.map(product => 
+          product.id === editingProductId 
+            ? {
+                ...product,
+                name: formData.name,
+                description: formData.description,
+                benefits: formData.benefits,
+                category: formData.category,
+                weight: formData.weight,
+                price: `₹${formData.amount}`
+              }
+            : product
+        )
+      );
     } else {
-      console.log('Adding New Product Data:', formData);
-      console.log('Images:', selectedImages);
-      // Add your product submission logic here
+      // Add new product
+      const newProduct = {
+        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+        name: formData.name,
+        description: formData.description,
+        benefits: formData.benefits,
+        category: formData.category,
+        weight: formData.weight,
+        price: `₹${formData.amount}`,
+        stock: 0
+      };
+      setProducts(prevProducts => [...prevProducts, newProduct]);
     }
     handleCloseForm();
   };
@@ -270,39 +305,14 @@ const Products = () => {
               {/* Product Weight */}
               <div className="form-group">
                 <label>Product Weight *</label>
-                <div className="input-with-add">
-                  <select
-                    name="weight"
-                    value={formData.weight}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select weight</option>
-                    {weights.map((weight, index) => (
-                      <option key={index} value={weight}>{weight}</option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="add-btn"
-                    onClick={() => setShowWeightInput(!showWeightInput)}
-                  >
-                    <MdAdd />
-                  </button>
-                </div>
-                {showWeightInput && (
-                  <div className="add-new-field">
-                    <input
-                      type="text"
-                      value={newWeight}
-                      onChange={(e) => setNewWeight(e.target.value)}
-                      placeholder="Enter new weight (e.g., 2kg)"
-                    />
-                    <button type="button" className="btn-primary" onClick={handleAddWeight}>
-                      Add Weight
-                    </button>
-                  </div>
-                )}
+                <input
+                  type="text"
+                  name="weight"
+                  value={formData.weight}
+                  onChange={handleInputChange}
+                  placeholder="Enter weight (e.g., 500g, 1kg)"
+                  required
+                />
               </div>
 
               {/* Amount */}
@@ -441,73 +451,30 @@ const Products = () => {
                                   {/* Product Category */}
                                   <div className="form-group">
                                     <label>Product Category *</label>
-                                    <div className="input-with-add">
-                                      <select
-                                        name="category"
-                                        value={formData.category}
-                                        onChange={handleInputChange}
-                                        required
-                                      >
-                                        <option value="">Select category</option>
-                                        {categories.map((cat, index) => (
-                                          <option key={index} value={cat}>{cat}</option>
-                                        ))}
-                                      </select>
-                                      <button
-                                        type="button"
-                                        className="add-btn"
-                                        onClick={() => setShowCategoryInput(!showCategoryInput)}
-                                      >
-                                        <MdAdd />
-                                      </button>
-                                    </div>
-                                    {showCategoryInput && (
-                                      <div className="add-input-wrapper">
-                                        <input
-                                          type="text"
-                                          value={newCategory}
-                                          onChange={(e) => setNewCategory(e.target.value)}
-                                          placeholder="New category name"
-                                        />
-                                        <button type="button" onClick={handleAddCategory}>Add</button>
-                                      </div>
-                                    )}
+                                    <select
+                                      name="category"
+                                      value={formData.category}
+                                      onChange={handleInputChange}
+                                      required
+                                    >
+                                      <option value="">Select category</option>
+                                      {categories.map((cat, index) => (
+                                        <option key={index} value={cat}>{cat}</option>
+                                      ))}
+                                    </select>
                                   </div>
 
                                   {/* Product Weight */}
                                   <div className="form-group">
                                     <label>Product Weight *</label>
-                                    <div className="input-with-add">
-                                      <select
-                                        name="weight"
-                                        value={formData.weight}
-                                        onChange={handleInputChange}
-                                        required
-                                      >
-                                        <option value="">Select weight</option>
-                                        {weights.map((weight, index) => (
-                                          <option key={index} value={weight}>{weight}</option>
-                                        ))}
-                                      </select>
-                                      <button
-                                        type="button"
-                                        className="add-btn"
-                                        onClick={() => setShowWeightInput(!showWeightInput)}
-                                      >
-                                        <MdAdd />
-                                      </button>
-                                    </div>
-                                    {showWeightInput && (
-                                      <div className="add-input-wrapper">
-                                        <input
-                                          type="text"
-                                          value={newWeight}
-                                          onChange={(e) => setNewWeight(e.target.value)}
-                                          placeholder="New weight (e.g., 2kg)"
-                                        />
-                                        <button type="button" onClick={handleAddWeight}>Add</button>
-                                      </div>
-                                    )}
+                                    <input
+                                      type="text"
+                                      name="weight"
+                                      value={formData.weight}
+                                      onChange={handleInputChange}
+                                      placeholder="Enter weight (e.g., 500g, 1kg)"
+                                      required
+                                    />
                                   </div>
 
                                   {/* Product Amount */}

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { MdSearch, MdDownload, MdSort } from 'react-icons/md';
+import { MdSearch, MdDownload, MdSort, MdCalendarToday, MdEvent } from 'react-icons/md';
 import '../styles/Revenue.css';
 
 const Revenue = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
   const [revenues, setRevenues] = useState([
     {
       id: 1,
@@ -72,6 +74,26 @@ const Revenue = () => {
     }
   ]);
 
+  // Month names for the month filter
+  const months = [
+    { value: '01', label: 'January' },
+    { value: '02', label: 'February' },
+    { value: '03', label: 'March' },
+    { value: '04', label: 'April' },
+    { value: '05', label: 'May' },
+    { value: '06', label: 'June' },
+    { value: '07', label: 'July' },
+    { value: '08', label: 'August' },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'October' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'December' }
+  ];
+
+  // Generate year list (last 5 years)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+
   // Download single revenue entry as CSV
   const downloadRevenueCSV = (revenue) => {
     const csvContent = [
@@ -138,13 +160,26 @@ const Revenue = () => {
   const getFilteredAndSortedRevenues = () => {
     let filtered = revenues.filter(revenue => {
       const searchLower = searchTerm.toLowerCase();
-      return (
+      const revenueDate = new Date(revenue.date);
+      const revenueMonth = String(revenueDate.getMonth() + 1).padStart(2, '0');
+      const revenueYear = String(revenueDate.getFullYear());
+
+      // Search filter
+      const matchesSearch = (
         revenue.customerName.toLowerCase().includes(searchLower) ||
         revenue.productName.toLowerCase().includes(searchLower) ||
         revenue.paymentMode.toLowerCase().includes(searchLower) ||
         revenue.date.includes(searchTerm) ||
         revenue.totalAmount.includes(searchTerm)
       );
+
+      // Month filter
+      const matchesMonth = selectedMonth === '' || revenueMonth === selectedMonth;
+
+      // Year filter
+      const matchesYear = selectedYear === '' || revenueYear === selectedYear;
+
+      return matchesSearch && matchesMonth && matchesYear;
     });
 
     // Sort logic
@@ -158,10 +193,6 @@ const Revenue = () => {
           return new Date(a.date) - new Date(b.date);
         case 'date-desc':
           return new Date(b.date) - new Date(a.date);
-        case 'month':
-          return new Date(a.date).getMonth() - new Date(b.date).getMonth();
-        case 'year':
-          return new Date(a.date).getFullYear() - new Date(b.date).getFullYear();
         default:
           return 0;
       }
@@ -218,8 +249,34 @@ const Revenue = () => {
               <option value="date-asc">Date (Oldest First)</option>
               <option value="name-asc">Name (A-Z)</option>
               <option value="name-desc">Name (Z-A)</option>
-              <option value="month">Month</option>
-              <option value="year">Year</option>
+            </select>
+          </div>
+
+          <div className="filter-box">
+            <MdCalendarToday className="filter-icon" />
+            <select 
+              value={selectedMonth} 
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="filter-select"
+            >
+              <option value="">All Months</option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>{month.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-box">
+            <MdEvent className="filter-icon" />
+            <select 
+              value={selectedYear} 
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="filter-select"
+            >
+              <option value="">All Years</option>
+              {years.map((year) => (
+                <option key={year} value={String(year)}>{year}</option>
+              ))}
             </select>
           </div>
         </div>
